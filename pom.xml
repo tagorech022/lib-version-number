@@ -1,72 +1,79 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 
+         http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
-  <parent>
-    <groupId>org.sonatype.oss</groupId>
-    <artifactId>oss-parent</artifactId>
-    <version>7</version>
-  </parent>
+    <modelVersion>4.0.0</modelVersion>
 
-  <groupId>com.cloudbees</groupId>
-  <artifactId>maven-license-plugin</artifactId>
-  <version>1.8-SNAPSHOT</version>
-  <packaging>maven-plugin</packaging>
+    <parent>
+        <groupId>org.jenkins-ci.plugins</groupId>
+        <artifactId>plugin</artifactId>
+        <version>4.40</version>
+        <relativePath /> <!-- Important: Avoids looking for local parent -->
+    </parent>
 
-  <name>maven-license-plugin Maven Plugin</name>
-  <url>http://maven.apache.org</url>
+    <groupId>org.jenkins-ci.plugins</groupId>
+    <artifactId>lib-version-number</artifactId>
+    <version>1.2-SNAPSHOT</version>
+    <packaging>hpi</packaging>
+    <name>Lib Version Number Plugin</name>
 
-  <properties>
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-  </properties>
-  
-  <scm>
-    <connection>scm:git:git@github.com:cloudbees/maven-license-plugin.git</connection>
-    <developerConnection>scm:git:git@github.com:cloudbees/maven-license-plugin.git</developerConnection>
-  </scm>
-    
+    <properties>
+        <java.level>11</java.level>
+        <jenkins.version>2.414.1</jenkins.version>
+        <plugin.firstClassLoader>true</plugin.firstClassLoader>
+    </properties>
 
-  <dependencies>
-    <dependency>
-      <groupId>org.apache.maven</groupId>
-      <artifactId>maven-plugin-api</artifactId>
-      <version>2.0</version>
-    </dependency>
-    <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-      <version>3.8.1</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.maven</groupId>
-      <artifactId>maven-core</artifactId>
-      <version>2.0</version>
-    </dependency>
-    <dependency>
-      <groupId>org.codehaus.groovy</groupId>
-      <artifactId>groovy</artifactId>
-      <version>1.6.5</version>
-    </dependency>
-  </dependencies>
+    <repositories>
+        <repository>
+            <id>jenkins-repo</id>
+            <url>https://repo.jenkins-ci.org/public/</url>
+        </repository>
+    </repositories>
 
-  <build>
-    <plugins>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-plugin-plugin</artifactId>
-        <version>2.5.1</version>
-        <configuration>
-          <goalPrefix>maven-license-plugin</goalPrefix>
-        </configuration>
-        <executions>
-          <execution>
-            <id>generated-helpmojo</id>
-            <goals>
-              <goal>helpmojo</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin>
-    </plugins>
-  </build>
+    <dependencies>
+        <!-- Jenkins Core -->
+        <dependency>
+            <groupId>org.jenkins-ci.main</groupId>
+            <artifactId>jenkins-core</artifactId>
+            <version>${jenkins.version}</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <!-- Jenkins Annotations -->
+        <dependency>
+            <groupId>org.jenkins-ci</groupId>
+            <artifactId>annotation-indexer</artifactId>
+            <version>1.12</version>
+        </dependency>
+
+        <!-- Testing -->
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.13.2</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.11.0</version>
+                <configuration>
+                    <source>11</source>
+                    <target>11</target>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.jenkins-ci.tools</groupId>
+                <artifactId>maven-hpi-plugin</artifactId>
+                <version>3.44</version>
+            </plugin>
+        </plugins>
+    </build>
+
 </project>
