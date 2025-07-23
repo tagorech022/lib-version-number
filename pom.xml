@@ -1,79 +1,143 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0"
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ ~ The MIT License
+ ~ Copyright (c) 2016, CloudBees, Inc.
+-->
+<project xmlns="http://maven.apache.org/POM/4.0.0" 
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 
-         http://maven.apache.org/xsd/maven-4.0.0.xsd">
+                             http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
-    <modelVersion>4.0.0</modelVersion>
+  <modelVersion>4.0.0</modelVersion>
 
-    <parent>
-        <groupId>org.jenkins-ci.plugins</groupId>
-        <artifactId>plugin</artifactId>
-        <version>4.40</version>
-        <relativePath /> <!-- Important: Avoids looking for local parent -->
-    </parent>
-
+  <parent>
     <groupId>org.jenkins-ci.plugins</groupId>
-    <artifactId>lib-version-number</artifactId>
-    <version>1.2-SNAPSHOT</version>
-    <packaging>hpi</packaging>
-    <name>Lib Version Number Plugin</name>
+    <artifactId>plugin</artifactId>
+    <version>3.36</version>
+  </parent>
 
-    <properties>
-        <java.level>11</java.level>
-        <jenkins.version>2.414.1</jenkins.version>
-        <plugin.firstClassLoader>true</plugin.firstClassLoader>
-    </properties>
+  <artifactId>skip-notifications-trait</artifactId>
+  <version>1.0.5-SNAPSHOT</version>
+  <packaging>hpi</packaging>
 
-    <repositories>
-        <repository>
-            <id>jenkins-repo</id>
-            <url>https://repo.jenkins-ci.org/public/</url>
-        </repository>
-    </repositories>
+  <name>Skip Notifications Trait plugin</name>
+  <description>This is an extension for Bitbucket and GitHub Branch Source Plugin, which allows to skip notifying BitBucket or GitHub instances about build statuses.</description>
+  <url>https://github.com/jenkinsci/skip-notifications-trait-plugin</url>
 
+  <licenses>
+    <license>
+      <name>MIT License</name>
+      <url>https://opensource.org/licenses/MIT</url>
+    </license>
+  </licenses>
+
+  <developers>
+    <developer>
+      <id>alex_dubrouski</id>
+      <name>Alex Dubrouski</name>
+    </developer>
+  </developers>
+
+  <scm>
+    <connection>scm:git:git://github.com/jenkinsci/skip-notifications-trait-plugin.git</connection>
+    <developerConnection>scm:git:git@github.com:jenkinsci/skip-notifications-trait-plugin.git</developerConnection>
+    <url>https://github.com/jenkinsci/skip-notifications-trait-plugin</url>
+    <tag>HEAD</tag>
+  </scm>
+
+  <properties>
+    <jenkins.version>2.60.3</jenkins.version>
+    <java.level>8</java.level>
+    <branchsource.version>2.4.4</branchsource.version>
+    <scm-api.version>2.3.0</scm-api.version>
+  </properties>
+
+  <dependencyManagement>
     <dependencies>
-        <!-- Jenkins Core -->
-        <dependency>
-            <groupId>org.jenkins-ci.main</groupId>
-            <artifactId>jenkins-core</artifactId>
-            <version>${jenkins.version}</version>
-            <scope>provided</scope>
-        </dependency>
-
-        <!-- Jenkins Annotations -->
-        <dependency>
-            <groupId>org.jenkins-ci</groupId>
-            <artifactId>annotation-indexer</artifactId>
-            <version>1.12</version>
-        </dependency>
-
-        <!-- Testing -->
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>4.13.2</version>
-            <scope>test</scope>
-        </dependency>
+      <dependency>
+        <groupId>com.jcraft</groupId>
+        <artifactId>jsch</artifactId>
+        <version>0.1.55</version>
+      </dependency>
+      <dependency>
+        <groupId>org.jenkins-ci.plugins</groupId>
+        <artifactId>token-macro</artifactId>
+        <version>1.12.1</version>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.commons</groupId>
+        <artifactId>commons-lang3</artifactId>
+        <version>3.7</version>
+      </dependency>
+      <dependency>
+        <groupId>org.jenkins-ci.plugins</groupId>
+        <artifactId>git</artifactId>
+        <version>3.9.3</version>
+      </dependency>
+      <dependency>
+        <groupId>org.jenkins-ci.plugins</groupId>
+        <artifactId>scm-api</artifactId>
+        <version>${scm-api.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.jenkins-ci.plugins</groupId>
+        <artifactId>structs</artifactId>
+        <version>1.17</version>
+      </dependency>
     </dependencies>
+  </dependencyManagement>
 
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.11.0</version>
-                <configuration>
-                    <source>11</source>
-                    <target>11</target>
-                </configuration>
-            </plugin>
+  <dependencies>
+    <dependency>
+      <groupId>org.jenkins-ci.plugins</groupId>
+      <artifactId>cloudbees-bitbucket-branch-source</artifactId>
+      <version>${branchsource.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.jenkins-ci.plugins</groupId>
+      <artifactId>github-branch-source</artifactId>
+      <version>2.4.0</version>
+    </dependency>
+    <dependency>
+      <groupId>org.jenkins-ci</groupId>
+      <artifactId>annotation-indexer</artifactId>
+      <version>1.12</version>
+      <scope>provided</scope>
+    </dependency>
+  </dependencies>
 
-            <plugin>
-                <groupId>org.jenkins-ci.tools</groupId>
-                <artifactId>maven-hpi-plugin</artifactId>
-                <version>3.44</version>
-            </plugin>
-        </plugins>
-    </build>
+  <repositories>
+    <repository>
+      <id>repo.jenkins-ci.org</id>
+      <url>https://repo.jenkins-ci.org/public/</url>
+    </repository>
+  </repositories>
+
+  <pluginRepositories>
+    <pluginRepository>
+      <id>repo.jenkins-ci.org</id>
+      <url>https://repo.jenkins-ci.org/public/</url>
+    </pluginRepository>
+  </pluginRepositories>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>3.8.0</version>
+        <configuration>
+          <annotationProcessorPaths>
+            <path>
+              <groupId>org.jenkins-ci</groupId>
+              <artifactId>annotation-indexer</artifactId>
+              <version>1.12</version>
+            </path>
+          </annotationProcessorPaths>
+          <generatedSourcesDirectory>${project.build.directory}/generated-sources/annotations</generatedSourcesDirectory>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
 
 </project>
