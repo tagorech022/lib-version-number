@@ -2,23 +2,37 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 
-                             http://maven.apache.org/xsd/maven-4.0.0.xsd">
-                             
+                             https://maven.apache.org/xsd/maven-4.0.0.xsd">
+
   <modelVersion>4.0.0</modelVersion>
 
-  <groupId>org.jenkins-ci</groupId>
-  <artifactId>version-number</artifactId>
-  <version>1.2-SNAPSHOT</version>
-  <packaging>jar</packaging>
-  <name>Version number manipulation</name>
+  <!-- Change for each project -->
+  <groupId>io.jenkins.plugins</groupId>
+  <artifactId>your-plugin-name</artifactId>
+  <version>1.0-SNAPSHOT</version>
+  <packaging>hpi</packaging>
+  <name>Your Jenkins Plugin</name>
+  <description>Universal POM for Jenkins plugin projects.</description>
+  <url>https://www.jenkins.io</url>
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <maven.compiler.source>11</maven.compiler.source> <!-- or 17 -->
-    <maven.compiler.target>11</maven.compiler.target>
+    <jenkins.version>2.387.2</jenkins.version> <!-- Change based on target Jenkins -->
+    <java.level>11</java.level>                <!-- Or 17 -->
+    <maven.compiler.source>${java.level}</maven.compiler.source>
+    <maven.compiler.target>${java.level}</maven.compiler.target>
   </properties>
 
   <dependencies>
+    <!-- Jenkins Plugin API -->
+    <dependency>
+      <groupId>org.jenkins-ci.main</groupId>
+      <artifactId>jenkins-core</artifactId>
+      <version>${jenkins.version}</version>
+      <scope>provided</scope>
+    </dependency>
+
+    <!-- JUnit for testing -->
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
@@ -29,15 +43,28 @@
 
   <build>
     <plugins>
+      <!-- Jenkins Plugin build tool -->
+      <plugin>
+        <groupId>org.jenkins-ci.tools</groupId>
+        <artifactId>maven-hpi-plugin</artifactId>
+        <version>3.43</version>
+        <configuration>
+          <compatibleSinceVersion>1.0</compatibleSinceVersion>
+        </configuration>
+      </plugin>
+
+      <!-- Java Compiler -->
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
         <version>3.11.0</version>
         <configuration>
-          <source>${maven.compiler.source}</source>
-          <target>${maven.compiler.target}</target>
+          <source>${java.level}</source>
+          <target>${java.level}</target>
         </configuration>
       </plugin>
+
+      <!-- Surefire plugin for running unit tests -->
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-surefire-plugin</artifactId>
@@ -46,15 +73,21 @@
     </plugins>
   </build>
 
-  <scm>
-    <connection>scm:git:git://github.com/jenkinsci/lib-version-number.git</connection>
-    <developerConnection>scm:git:git@github.com:jenkinsci/lib-version-number.git</developerConnection>
-  </scm>
+  <repositories>
+    <repository>
+      <id>jenkins-releases</id>
+      <url>https://repo.jenkins-ci.org/releases/</url>
+    </repository>
+    <repository>
+      <id>maven-central</id>
+      <url>https://repo.maven.apache.org/maven2</url>
+    </repository>
+  </repositories>
 
-  <licenses>
-    <license>
-      <name>MIT License</name>
-      <url>http://jenkins-ci.org/mit-license</url>
-    </license>
-  </licenses>
+  <pluginRepositories>
+    <pluginRepository>
+      <id>jenkins-releases</id>
+      <url>https://repo.jenkins-ci.org/releases/</url>
+    </pluginRepository>
+  </pluginRepositories>
 </project>
